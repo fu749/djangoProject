@@ -4,80 +4,106 @@
     <meta charset="UTF-8">
     <title>图书管理系统</title>
     <style>
-        body {
-            font-family: Arial, sans-serif;
+        /* 通用样式 */
+        * {
+            box-sizing: border-box;
             margin: 0;
             padding: 0;
-            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #e9ecef;
             display: flex;
             flex-direction: column;
-            min-height: 100vh; /* 确保页面占满整个视口高度 */
+            min-height: 100vh;
         }
         header {
-            background: #35424a;
+            background-color: #35424a;
             color: #ffffff;
-            padding: 15px 0; /* 增加顶部内边距 */
+            padding: 20px;
             text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        footer {
+            background-color: #35424a;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: auto;
         }
         main {
-            display: flex; /* 使用flex布局 */
-            flex: 1; /* 让内容区域占满剩余空间 */
+            display: flex;
+            flex: 1;
+            margin: 20px auto;
+            max-width: 1200px;
+            width: 100%;
         }
+
+        /* 侧边导航栏样式 */
         nav {
-            width: 200px;
+            width: 250px;
             background: #35424a;
             padding: 20px;
+            border-radius: 8px;
             box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            border-radius: 5px;
             display: flex;
             flex-direction: column;
         }
         nav ul {
             list-style: none;
             padding: 0;
-            margin: 0;
         }
         nav ul li {
-            margin: 15px 0;
+            margin: 10px 0;
         }
         nav ul li a {
-            text-decoration: none;
             color: #ffffff;
-            padding: 10px;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 12px 15px;
             border-radius: 5px;
             display: block;
             transition: background 0.3s;
         }
         nav ul li a:hover {
-            background: #3a4d58; /* 悬停时的背景色 */
+            background-color: #3a4d58;
         }
-        .search-module {
-            max-width: 1500px;
-            margin: 20px; /* 添加外边距 */
+
+        /* 内容区域样式 */
+        .content {
+            flex: 1;
+            margin-left: 20px;
             padding: 20px;
             background: #ffffff;
-            border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .search-module {
+            margin-bottom: 20px;
         }
         .search-container {
-            display: flex; /* 使用flex布局 */
-            margin: 0; /* 清除外边距 */
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .search-container input[type="text"] {
+            flex: 1;
             padding: 10px;
+            font-size: 1rem;
             border: 1px solid #ccc;
             border-radius: 5px;
-            width: 100%;
-            box-sizing: border-box;
-            transition: border 0.3s;
+            transition: border-color 0.3s;
         }
         .search-container input[type="text"]:focus {
             border-color: #007bff;
             outline: none;
         }
         .search-container button {
-            padding: 10px 15px;
-            margin-left: 10px;
+            padding: 10px 20px;
+            font-size: 1rem;
             border: none;
             border-radius: 5px;
             background: #007bff;
@@ -86,30 +112,41 @@
             transition: background 0.3s;
         }
         .search-container button:hover {
-            background: #0056b3; /* 悬停时的背景色 */
+            background: #0056b3;
         }
-        .content {
-            flex: 1; /* 让内容区域占满剩余空间 */
-            max-width: 1500px;
-            margin: 20px; /* 添加外边距 */
-            padding: 20px;
-            background: #ffffff;
+
+        /* 搜索结果样式 */
+        .content_head {
+            padding: 15px;
+            font-size: 1.1rem;
+            color: #333;
+        }
+        .content_head p {
+            padding: 15px;
+            border: 1px solid #e0e0e0;
+            background-color: #f8f9fa;
             border-radius: 5px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            display: flex;
-            flex-direction: column; /* 垂直排列内容 */
         }
-        footer {
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
             text-align: center;
-            padding: 10px 0;
-            background: #35424a;
-            color: #ffffff;
+        }
+        th {
+            background-color: #f2f2f2;
         }
     </style>
 </head>
 <body>
     <header>
-        <h1>欢迎来到图书管理系统</h1>
+        欢迎来到图书管理系统
     </header>
     <main>
         <nav>
@@ -126,24 +163,69 @@
             <div class="search-module">
                 <div class="search-container">
                     <input type="text" placeholder="搜索图书..." id="searchInput">
-                    <button onclick="searchBooks()">搜索</button> <!-- 添加搜索按钮 -->
+                    <button onclick="searchBooks()">搜索</button>
                 </div>
             </div>
-            <div class="content_text">
-                <h2>系统介绍</h2>
-                <p>该系统帮助用户管理图书，包括借书、还书和收藏功能。</p>
+            <div class="content_head">
+                <p id="resultDisplay">该系统帮助用户管理图书，包括借书、还书和收藏功能。</p>
             </div>
+            <table id="resultsTable" style="display:none;">
+                <thead>
+                    <tr>
+                        <th>书名</th>
+                        <th>作者</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody id="resultsBody">
+                    <!-- 搜索结果将插入到这里 -->
+                </tbody>
+            </table>
         </div>
     </main>
     <footer>
-        <p>2024 图书管理系统</p>
+        2024 图书管理系统
     </footer>
 
     <script>
         function searchBooks() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            // 这里可以实现搜索功能
-            console.log(`搜索内容: ${input}`);
+            const input = document.getElementById('searchInput').value;
+            fetch(`/search_books/?search=${input}`, {
+                method: 'GET',
+                headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const contentText = document.getElementById('resultDisplay');
+                const resultsTable = document.getElementById('resultsTable');
+                const resultsBody = document.getElementById('resultsBody');
+
+                // 清空旧的结果
+                resultsBody.innerHTML = '';
+
+                if (data.results && data.results.length > 0) {
+                    contentText.innerText = '';  // 清空提示信息
+                    resultsTable.style.display = 'table'; // 显示表格
+                    data.results.forEach(book => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${book.name}</td>
+                            <td>${book.author}</td>
+                            <td>
+                                <a class="btn btn-danger btn-sm" href="/delete/${book.id}">删除</a>
+                                <a class="btn btn-success btn-sm" href="/download/${book.id}">下载</a>
+                            </td>
+                        `;
+                        resultsBody.appendChild(row);
+                    });
+                } else {
+                    contentText.innerText = '未找到相关图书';
+                    resultsTable.style.display = 'none'; // 隐藏表格
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+            });
         }
     </script>
 </body>
