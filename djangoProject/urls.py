@@ -13,10 +13,12 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-
+from IPython.testing.plugin.pytest_ipdoctest import import_path
 from django.contrib import admin
 from django.urls import path
 
+from borrowServlet import borrow_Book
+from searchServlet import search_books
 from registServlet import regist
 from loginOutServlet import loginOut
 from loginServlet import login
@@ -26,4 +28,6 @@ urlpatterns = [
     path('', index, name='index'),  # 主页
     path('register/', regist, name='register'),  # 主页
     path('loginOut/', loginOut, name='loginOut'),  # 登录页面
+    path('search_books/', search_books, name='search_books'),
+    path('borrow/<int:book_id>/', borrow_Book, name='borrow_Book'),
 ]
