@@ -179,6 +179,32 @@
                 background-color: #ccc; /* 禁用时颜色 */
                 cursor: not-allowed; /* 改变光标 */
             }
+            /*分页*/
+            #pagination {
+                margin-top: 20px;
+                text-align: center;
+            }
+
+            #pagination button {
+                margin: 0 5px;
+                padding: 10px 15px;
+                border: none;
+                background-color: #007bff;
+                color: white;
+                border-radius: 5px;
+                cursor: pointer;
+                transition: background 0.3s;
+            }
+
+            #pagination button:hover {
+                background-color: #0056b3;
+            }
+
+            #pagination button.active {
+                background-color: #0056b3; /* 当前页的背景色 */
+                color: white; /* 当前页的字体颜色 */
+            }
+
         </style>
     </head>
     <body>
@@ -218,18 +244,32 @@
                         <!-- 搜索结果将插入到这里 -->
                     </tbody>
                 </table>
+                <div id="pagination"></div>
             </div>
         </main>
         <footer>
             2024 图书管理系统
         </footer>
-    
+
+
+
+
+
+
+
+
+
+
+
+
         <script>
+            let currentPage = 1; // 当前页
+            const pageSize = 10;
             function searchBooks() {
                 const input = document.getElementById('searchInput').value;
                 const contentText = document.getElementById('resultDisplay');
                 contentText.innerText = '搜索中...';  // 显示加载提示
-                fetch(`/search_books/?search=${input}`, {
+                fetch(`/search_books/?search=${input}&page=${currentPage}&pageSize=${pageSize}`, {
                     method: 'GET',
                     headers: { 'Content-Type': 'application/json' }
                 })
@@ -238,10 +278,10 @@
                     contentText.innerText = '';
                     const resultsTable = document.getElementById('resultsTable');
                     const resultsBody = document.getElementById('resultsBody');
-    
+
                     // 清空旧的结果
                     resultsBody.innerHTML = '';
-    
+
                     if (data.results && data.results.length > 0) {
                         contentText.innerText = '';  // 清空提示信息
                         resultsTable.style.display = 'table'; // 显示表格
@@ -257,6 +297,7 @@
                             `;
                             resultsBody.appendChild(row);
                         });
+                        renderPagination(data.totalPages); // 调用分页渲染函数
                     } else {
                         contentText.innerText = '未找到相关图书';
                         resultsTable.style.display = 'none'; // 隐藏表格
@@ -266,10 +307,47 @@
                     console.error('Error:', error);
                 });
             }
-        </script>
-        
-        
-        <script>
+            function renderPagination(totalPages) {
+                const paginationContainer = document.getElementById('pagination');
+                paginationContainer.innerHTML = ''; // 清空现有的分页按钮
+            
+                // 上一页按钮
+                if (currentPage > 1) {
+                    const prevButton = document.createElement('button');
+                    prevButton.innerText = '上一页';
+                    prevButton.onclick = () => {
+                        currentPage--;
+                        searchBooks();
+                    };
+                    paginationContainer.appendChild(prevButton);
+                }
+            
+                for (let i = 1; i <= totalPages; i++) {
+                    const button = document.createElement('button');
+                    button.innerText = i;
+                    button.onclick = () => {
+                        currentPage = i;
+                        searchBooks(); // 重新搜索
+                    };
+                    paginationContainer.appendChild(button);
+                }
+            
+                // 下一页按钮
+                if (currentPage < totalPages) {
+                    const nextButton = document.createElement('button');
+                    nextButton.innerText = '下一页';
+                    nextButton.onclick = () => {
+                        currentPage++;
+                        searchBooks();
+                    };
+                    paginationContainer.appendChild(nextButton);
+                }
+            }
+            
+            
+            
+            
+            //借书
             function borrowBook(bookId, button) {
                 fetch(`/borrow/${bookId}/`, {
                     method: 'POST',
