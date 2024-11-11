@@ -204,22 +204,41 @@
                 background-color: #0056b3; /* 当前页的背景色 */
                 color: white; /* 当前页的字体颜色 */
             }
+            .login-link {
+                color: white;              /* 设置文字颜色为白色 */
+                text-decoration: none;     /* 去掉链接下划线 */
+                font-size: 20px;           /* 可以根据需要调整字体大小 */
+                padding: 10px 20px;        /* 可以根据需要调整内边距 */
+                position: absolute;        /* 使用绝对定位来实现右对齐 */
+                right: 80px;               /* 距离右边缘20px */
+                top: 10px;                 /* 距离顶部10px（可根据需要调整） */
+                display: inline-block;
+            }
+            .login-link2 {
+                color: white;              /* 设置文字颜色为白色 */
+                text-decoration: none;     /* 去掉链接下划线 */
+                font-size: 20px;           /* 可以根据需要调整字体大小 */
+                padding: 10px 20px;        /* 可以根据需要调整内边距 */
+                position: absolute;        /* 使用绝对定位来实现右对齐 */
+                right: 20px;               /* 距离右边缘20px */
+                top: 10px;                 /* 距离顶部10px（可根据需要调整） */
+                display: inline-block;
+            }
 
         </style>
     </head>
     <body>
         <header>
             欢迎来到图书管理系统
+            <a href="/login/" class="login-link" id="loginLink">登录</a>
+            <span id="userGreeting" class="login-link" style="display:none;"></span>
+            <a href="/loginOut/" class="login-link2" id="logoutLink">登出</a>
         </header>
         <main>
             <nav>
                 <ul>
-                    <li><a href="/login/">登录</a></li>
-                    <li><a href="/borrow/">借书</a></li>
-                    <li><a href="/return/">还书</a></li>
-                    <li><a href="/favorites/">收藏图书</a></li>
-                    <li><a href="/myLoans/">我的借阅</a></li>
-                    <li><a href="/loginOut/">登出</a></li>
+                    <li><a href="/return/">我的借阅</a></li>
+                    <li><a href="/favorites/">收藏的图书</a></li>
                 </ul>
             </nav>
             <div class="content">
@@ -263,6 +282,22 @@
 
 
         <script>
+            const user = "{{ user|default:'' }}";// Django模板语法示例，其他框架类似
+            if (user) {
+                // 如果用户已登录，隐藏登录链接，显示用户名和登出链接
+                document.getElementById('loginLink').style.display = 'none';
+                document.getElementById('logoutLink').style.display = 'inline-block';
+                document.getElementById('userGreeting').innerText = `欢迎回来！${user}`; // 显示用户名
+                document.getElementById('userGreeting').style.display = 'inline-block';
+            } else {
+                // 如果用户没有登录，显示登录链接
+                document.getElementById('loginLink').style.display = 'inline-block';
+            }
+
+
+
+
+
             let currentPage = 1; // 当前页
             const pageSize = 10;
             function searchBooks() {
@@ -344,10 +379,10 @@
                 }
             }
             
-            
-            
-            
             //借书
+            
+            
+            
             function borrowBook(bookId, button) {
                 fetch(`/borrow/${bookId}/`, {
                     method: 'POST',
@@ -365,8 +400,15 @@
                 })
                 .then(data => {
                     // 更新按钮文本为“已借阅”
-                    button.innerText = '已借阅';
+                    if (data.message === "你已经是黑名单了，请联系管理员处理!") {
+                        button.innerText = '不可借阅';
+                        button.disabled = true;
+                    }else{
+                        button.innerText = '已借阅';
+                    }
+
                     button.disabled = true; // 禁用按钮
+
                     alert(data.message); // 显示成功消息
                 })
                 .catch(error => {

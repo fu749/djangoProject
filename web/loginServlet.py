@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 
 from function1.login import login_t
-
+from function1.loginName import rd_online
 
 def login(request):
     if request.method == 'POST':
@@ -10,7 +10,8 @@ def login(request):
         result=login_t(username, password)
         print(result)
         if result==f"{username} 登录成功":
-            return redirect('index')  # 登录成功后重定向到主页
+            user = rd_online()
+            return render(request, 'index.html',{'user': user})   # 登录成功后重定向到主页
         else:
             # 处理错误
             return render(request, 'login.html', {'error': result})
