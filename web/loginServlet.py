@@ -2,11 +2,14 @@ from django.shortcuts import render, redirect
 
 from function1.login import login_t
 from function1.loginName import rd_online
+from function1.loginOut import loginOut_t
+
 
 def login(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
+        loginOut_t()
         result=login_t(username, password)
         print(result)
         if result==f"{username} 登录成功":
