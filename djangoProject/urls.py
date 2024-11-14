@@ -17,12 +17,14 @@ from IPython.testing.plugin.pytest_ipdoctest import import_path
 from django.contrib import admin
 from django.urls import path
 
+from bookList import Book_List
+from borrowBooks.returnBooks import returnBooks
 from borrowServlet import borrow_Book
 from searchServlet import search_books
 from registServlet import regist
 from loginOutServlet import loginOut
 from loginServlet import login
-from view import *
+from index import *
 urlpatterns = [
     path('login/', login, name='login'),  # 登录页面
     path('', index, name='index'),  # 主页
@@ -30,4 +32,7 @@ urlpatterns = [
     path('loginOut/', loginOut, name='loginOut'),  # 登录页面
     path('search_books/', search_books, name='search_books'),
     path('borrow/<int:book_id>/', borrow_Book, name='borrow_Book'),
+    path('Book_List/', Book_List, name='book_list'),
+    path('back_Book/', returnBooks, name='back_Book'),
+
 ]

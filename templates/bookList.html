@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>借书列表 - 图书管理系统</title>
+    <style>
+        /* 通用样式 */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background-color: #e9ecef;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        header {
+            background-color: #35424a;
+            color: #ffffff;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+        footer {
+            background-color: #35424a;
+            color: #ffffff;
+            padding: 10px;
+            text-align: center;
+            font-size: 0.9rem;
+            margin-top: auto;
+        }
+        main {
+            display: flex;
+            flex: 1;
+            margin: 20px auto;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        /* 侧边导航栏样式 */
+        nav {
+            width: 250px;
+            background: #35424a;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+        }
+        nav ul {
+            list-style: none;
+            padding: 0;
+        }
+        nav ul li {
+            margin: 10px 0;
+        }
+        nav ul li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1.1rem;
+            padding: 12px 15px;
+            border-radius: 5px;
+            display: block;
+            transition: background 0.3s;
+        }
+        nav ul li a:hover {
+            background-color: #3a4d58;
+        }
+
+        /* 内容区域样式 */
+        .content {
+            flex: 1;
+            margin-left: 20px;
+            padding: 20px;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        /* 表格样式 */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px;
+            text-align: center;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+
+        /* 返回首页按钮样式 */
+        .btn-home {
+            padding: 10px 20px;
+            font-size: 1rem;
+            border: none;
+            border-radius: 5px;
+            background: #28a745;
+            color: white;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-bottom: 20px;
+        }
+        .btn-home:hover {
+            background: #218838;
+        }
+         .login-link {
+                color: white;              /* 设置文字颜色为白色 */
+                text-decoration: none;     /* 去掉链接下划线 */
+                font-size: 20px;           /* 可以根据需要调整字体大小 */
+                padding: 10px 20px;        /* 可以根据需要调整内边距 */
+                position: absolute;        /* 使用绝对定位来实现右对齐 */
+                right: 80px;               /* 距离右边缘20px */
+                top: 10px;                 /* 距离顶部10px（可根据需要调整） */
+                display: inline-block;
+            }
+            .login-link2 {
+                color: white;              /* 设置文字颜色为白色 */
+                text-decoration: none;     /* 去掉链接下划线 */
+                font-size: 20px;           /* 可以根据需要调整字体大小 */
+                padding: 10px 20px;        /* 可以根据需要调整内边距 */
+                position: absolute;        /* 使用绝对定位来实现右对齐 */
+                right: 20px;               /* 距离右边缘20px */
+                top: 10px;                 /* 距离顶部10px（可根据需要调整） */
+                display: inline-block;
+            }
+    </style>
+</head>
+<body>
+    <header>
+        欢迎来到图书管理系统
+        <a href="/login/" class="login-link" id="loginLink">登录</a>
+        <span id="userGreeting" class="login-link" style="display:none;"></span>
+        <a href="/loginOut/" class="login-link2" id="logoutLink">登出</a>
+    </header>
+    <main>
+        <div class="content">
+            <button class="btn-home" onclick="window.location.href='/'">返回首页</button> <!-- 返回首页按钮 -->
+
+            <h2>借书列表</h2>
+            <table id="borrowedBooksTable">
+                <thead>
+                    <tr>
+                        <th>书名</th>
+                        <th>借阅时间</th>
+                        <th>操作</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 借书列表动态加载 -->
+                    {% for book in books %}
+                        <tr>
+                            <td>{{ book.name }}</td>
+                            <td>{{ book.borrowDate }}</td>
+                         <td>
+                             <a class="btn btn-success" href="/back_Book/${book.id}">还书</a>
+                         </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="3">未找到借阅记录</td>
+                        </tr>
+
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </main>
+    <footer>
+        2024 图书管理系统
+    </footer>
+
+    <script>
+        // 模拟用户信息判断，实际情况根据后端返回用户登录状态
+        const user = "{{ user|default:'' }}";  // 用户信息（可以从后端传递）
+
+        if (user&&user!="没有找到数据") {
+            // 如果用户已登录，隐藏登录链接，显示用户名和登出链接
+            document.getElementById('loginLink').style.display = 'none';
+            document.getElementById('logoutLink').style.display = 'inline-block';
+            document.getElementById('userGreeting').innerText = `欢迎回来！${user}`; // 显示用户名
+            document.getElementById('userGreeting').style.display = 'inline-block';
+        } else {
+            // 如果用户没有登录，显示登录链接
+            document.getElementById('loginLink').style.display = 'inline-block';
+        }
+    </script>
+</body>
+</html>

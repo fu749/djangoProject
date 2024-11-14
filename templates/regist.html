@@ -5,70 +5,104 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图书馆管理系统 - 注册</title>
     <style>
+        * {
+            margin: 0;
+            padding: 0;
+        }
+
+        html {
+            height: 100%;
+            width: 100%;
+            overflow: hidden;
+            background: url("/static/images/Desert.jpg") no-repeat center center fixed;
+            background-size: cover;
+            -moz-background-size: cover;
+        }
+
         body {
-            font-family: 'Arial', sans-serif;
-            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100%;
+        }
+
+        .register-container {
+            width: 37%;
             display: flex;
             justify-content: center;
             align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .register-container {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            width: 400px;
+            height: 500px;
+            background-color: rgba(75, 81, 95, 0.3);
+            box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
+            border-radius: 5px;
             text-align: center;
+            flex-direction: column;
         }
+
         h1 {
+            color: #f0edf3;
             margin-bottom: 20px;
-            color: #35424a;
         }
+
         h2 {
+            color: #f0edf3;
             margin-bottom: 20px;
-            color: #35424a;
         }
+
         .form-group {
             margin-bottom: 20px;
             text-align: left;
+            width: 100%;
+            display: flex;
+            align-items: center; /* 使label和input水平对齐 */
         }
+
         label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-            color: #333;
+            width: 30%;
+            margin-right: 10px;  /* 给label和input之间增加间隔 */
+            color: azure;
+            text-align: right;  /* 让label右对齐 */
         }
+
         input[type="text"], input[type="password"], input[type="email"] {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid #ccc;
+            width: 65%;
+            height: 30px;
+            padding-left: 10px;
             border-radius: 5px;
-            font-size: 14px;
+            border-style: hidden;
+            background-color: rgba(216, 191, 216, 0.5);
+            color: #f0edf3;
+            outline: none;
         }
-        button {
-            width: 100%;
-            padding: 12px;
-            background-color: #35424a ;
-            border: none;
-            color: white;
+
+        .button {
+            border-color: cornsilk;
+            background-color: rgba(100, 149, 237, .7);
+            color: aliceblue;
+            border-style: hidden;
             border-radius: 5px;
+            width: 100px;
+            height: 31px;
             font-size: 16px;
             cursor: pointer;
-            transition: background-color 0.3s;
         }
-        button:hover {
-            background-color: #35424a;
-        }
+
         .footer {
-            margin-top: 15px;
+            margin-top: 30px;
             font-size: 14px;
-            color: #666;
+            color: #f0edf3;
         }
+
         .footer a {
-            color: #35424a;
+            color: #f0edf3;
             text-decoration: none;
+        }
+
+        .errorM {
+            color: red;
+            border-radius: 5px;
+            margin-top: 10px;
+            margin-left: 150px;
         }
     </style>
 </head>
@@ -80,22 +114,22 @@
     <form action="/register/" method="post">
         {% csrf_token %}
         <div class="form-group">
-            <label for="username">用户名</label>
+            <label for="username">用户名: </label>
             <input type="text" id="username" name="username" required>
         </div>
         <div class="form-group">
-            <label for="password">密码</label>
+            <label for="password">密码: </label>
             <input type="password" id="password" name="password" required>
         </div>
         <div class="form-group">
-            <label for="confirm_password">确认密码</label>
+            <label for="confirm_password">确认密码: </label>
             <input type="password" id="confirm_password" name="confirm_password" onblur="validatePasswords()" required>
         </div>
-        <span id="error-message" style="color: red; display: none;">两次密码不一致</span>       
+        <span id="error-message" style="color: red; display: none;">两次密码不一致</span>
         {% if error %}
-             <div style="color: red;">{{ error }}</div>
+            <div style="color: red;">{{ error }}</div>
         {% endif %}
-        <button type="submit">注册</button>
+        <button type="submit" class="button">注册</button>
     </form>
     <div class="footer">
         <p>已有账号? <a href="/login">登录</a></p>
