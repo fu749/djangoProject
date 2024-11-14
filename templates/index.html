@@ -237,7 +237,7 @@
         <main>
             <nav>
                 <ul>
-                    <li><a href="/return/">我的借阅</a></li>
+                    <li><a href="/Book_List/">我的借阅</a></li>
                     <li><a href="/favorites/">收藏的图书</a></li>
                 </ul>
             </nav>
@@ -283,7 +283,7 @@
 
         <script>
             const user = "{{ user|default:'' }}";// Django模板语法示例，其他框架类似
-            if (user) {
+            if (user&&user!="没有找到数据") {
                 // 如果用户已登录，隐藏登录链接，显示用户名和登出链接
                 document.getElementById('loginLink').style.display = 'none';
                 document.getElementById('logoutLink').style.display = 'inline-block';
