@@ -159,8 +159,8 @@
                         <tr>
                             <td>{{ book.name }}</td>
                             <td>{{ book.borrowDate }}</td>
-                         <td><a class="btn btn-danger">借书</a>
-                             <a class="btn btn-success" href="/collection/${book.id}">收藏</a>
+                         <td>
+                             <a class="btn btn-success" href="/back_Book/${book.id}">还书</a>
                          </td>
                         </tr>
                     {% empty %}
