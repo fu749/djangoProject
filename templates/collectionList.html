@@ -149,12 +149,9 @@
                 background-color: #f8d7da;
                 color: #721c24;
             }
-
     </style>
 </head>
 <body>
-
-
     <header>
         欢迎来到图书管理系统
         <a href="/login/" class="login-link" id="loginLink">登录</a>
@@ -169,15 +166,16 @@
             </div>
         {% endfor %}
     </div>
-{% endif %}
+    {% endif %}
     <main>
         <div class="content">
             <button class="btn-home" onclick="window.location.href='/'">返回首页</button> <!-- 返回首页按钮 -->
 
-            <h2>借书列表</h2>
+            <h2>收藏列表</h2>
             <table id="borrowedBooksTable">
                 <thead>
                     <tr>
+                        <th>书号</th>
                         <th>书名</th>
                         <th>借阅时间</th>
                         <th>操作</th>
@@ -187,12 +185,13 @@
                     <!-- 借书列表动态加载 -->
                     {% for book in books %}
                         <tr>
+                            <td>{{ book.book_id }}</td>
                             <td>{{ book.name }}</td>
                             <td>{{ book.borrowDate }}</td>
                          <td>
-                             <form action="{% url 'back_Book' book_name=book.name %}" method="post">
+                             <form action="{% url 'unCollection' book_id=book.book_id %}" method="post">
                               {% csrf_token %}
-                              <button type="submit" class="btn btn-danger">还书</button>
+                              <button type="submit" class="btn btn-danger">取消收藏</button>
                             </form>
                          </td>
                         </tr>
@@ -202,8 +201,6 @@
                         </tr>
 
                     {% endfor %}
-                
-                    
                 </tbody>
             </table>
         </div>

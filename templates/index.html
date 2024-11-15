@@ -238,7 +238,7 @@
             <nav>
                 <ul>
                     <li><a href="/Book_List/">我的借阅</a></li>
-                    <li><a href="/favorites/">收藏的图书</a></li>
+                    <li><a href="/Collection_List/">收藏的图书</a></li>
                 </ul>
             </nav>
             <div class="content">
@@ -327,7 +327,7 @@
                                 <td>${book.author}</td>
                                 <td>
                                     <a class="btn btn-danger" onclick="borrowBook(${book.id}, this)">借书</a>
-                                    <a class="btn btn-success" href="/collection/${book.id}">收藏</a>
+                                    <a class="btn btn-success" onclick="collection(${book.id}, this)">收藏</a>
                                 </td>
                             `;
                             resultsBody.appendChild(row);
@@ -382,6 +382,39 @@
             //借书
             
             
+            
+            function collection(bookId, button) {
+                fetch(`/collection/${bookId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')  // 获取 CSRF token
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('借书失败');
+                    }
+                })
+                .then(data => {
+                    // 更新按钮文本为“已借阅”
+                    if (data.message === "没有登录不能操作") {
+                        button.innerText = '未登录';
+                        button.disabled = true;
+                    }else{
+                        button.innerText = '已收藏';
+                    }
+                    button.disabled = true; // 禁用按钮
+
+                    alert(data.message); // 显示成功消息
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('收藏过程中发生错误，请重试。');
+                });
+            }
             
             function borrowBook(bookId, button) {
                 fetch(`/borrow/${bookId}/`, {
