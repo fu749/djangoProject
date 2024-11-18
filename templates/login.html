@@ -4,109 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>图书馆管理系统 - 登录</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
-        html {
-            height: 100%;
-            width: 100%;
-            overflow: hidden;
-            background: url("/static/images/Desert.jpg") no-repeat center center fixed;
-            background-size: cover;
-            -moz-background-size: cover;
-        }
-
-        body {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            height: 100%;
-        }
-
-        .login-container {
-            width: 37%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 400px;
-            background-color: rgba(75, 81, 95, 0.3);
-            box-shadow: 7px 7px 17px rgba(52, 56, 66, 0.5);
-            border-radius: 5px;
-            text-align: center;
-            flex-direction: column;
-        }
-
-        h1 {
-            color: #f0edf3;
-            margin-bottom: 20px;
-        }
-
-        .form-group {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            margin-top: 20px;
-            width: 100%;
-        }
-
-        label {
-            display: inline-block;
-            width: 100px;
-            margin-right: 10px;
-            color: azure;
-            text-align: right;
-        }
-
-        input[type="text"], input[type="password"] {
-            width: calc(100% - 120px);  /* Subtract label width and margin */
-            height: 30px;
-            border-radius: 5px;
-            border-style: hidden;
-            background-color: rgba(216, 191, 216, 0.5);
-            color: #f0edf3;
-            padding-left: 10px;
-            outline: none;
-        }
-
-        .button {
-            border-color: cornsilk;
-            background-color: rgba(100, 149, 237, .7);
-            color: aliceblue;
-            border-style: hidden;
-            border-radius: 5px;
-            width: 100px;
-            height: 31px;
-            font-size: 16px;
-            cursor: pointer;
-        }
-
-        .footer {
-            margin-top: 30px;
-            font-size: 14px;
-            color: #f0edf3;
-        }
-
-        .footer a {
-            color: #f0edf3;
-            text-decoration: none;
-        }
-
-        .errorM {
-            color: red;
-            border-radius: 5px;
-            margin-top: 10px;
-            margin-left: 150px;
-        }
-    </style>
+    <link rel="stylesheet" href="../static/css/login.css">
 </head>
 <body>
 
 <div class="login-container">
     <h1>图书馆管理系统</h1>  <!-- 添加的标题 -->
-    <h2>用户登录</h2>
 
     <form action="/login/" method="post">
     {% csrf_token %}
@@ -121,11 +24,16 @@
         {% if error %}
             <div class="errorM">{{ error }}</div>
         {% endif %}
+
         <button type="submit" class="button">登录</button>
     </form>
     <div class="footer">
         <p>还没有账号? <a href="/register">注册</a></p>
     </div>
+    <div style="margin-top: 20px" class="admin">管理员
+        <a href="#">点这里</a>
+    </div>
+
 </div>
 
 </body>

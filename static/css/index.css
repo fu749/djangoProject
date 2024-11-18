@@ -1,0 +1,342 @@
+/* 通用样式 */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+}
+body {
+    background-image: url("/static/video/背景.gif");
+    background-size: cover;      /* 图片覆盖整个元素 */
+    background-position: center; /* 图片居中显示 */
+    background-repeat: no-repeat;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+header {
+    background-color: #35424a;
+    color: #ffffff;
+    padding: 20px;
+    text-align: center;
+    font-size: 1.5rem;
+    font-weight: bold;
+    opacity: 0.8;
+}
+footer {
+    background-color: #35424a;
+    opacity: 0.8;
+    color: #ffffff;
+    padding: 10px;
+    text-align: center;
+    font-size: 0.9rem;
+    margin-top: auto;
+}
+main {
+    display: flex;
+    flex: 1;
+    margin: 20px auto;
+    max-width: 1200px;
+    width: 100%;
+    opacity: 0.8;
+}
+
+/* 侧边导航栏样式 */
+nav {
+    width: 250px;
+    background: #35424a;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+}
+nav ul {
+    list-style: none;
+    padding: 0;
+}
+nav ul li {
+    margin: 10px 0;
+}
+nav ul li a {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 1.1rem;
+    padding: 12px 15px;
+    border-radius: 5px;
+    display: block;
+    transition: background 0.3s;
+}
+nav ul li a:hover {
+    background-color: #3a4d58;
+}
+
+/* 内容区域样式 */
+.content {
+    flex: 1;
+    margin-left: 20px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 8px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.search-module {
+    margin-bottom: 20px;
+}
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.search-container input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    transition: border-color 0.3s;
+}
+.search-container input[type="text"]:focus {
+    border-color: #007bff;
+    outline: none;
+}
+.search-container button {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    background: #007bff;
+    color: white;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+.search-container button:hover {
+    background: #0056b3;
+}
+
+/* 搜索结果样式 */
+.content_head {
+    padding: 15px;
+    font-size: 1.1rem;
+    color: #333;
+}
+.content_head p {
+    padding: 15px;
+    border: 1px solid #e0e0e0;
+    background-color: #f8f9fa;
+    border-radius: 5px;
+}
+
+/* 表格样式 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+th, td {
+    border: 1px solid #e0e0e0;
+    padding: 10px;
+    text-align: center;
+}
+th {
+    background-color: #f2f2f2;
+}
+
+/* 按钮样式 */
+.btn {
+    padding: 10px 20px;
+    font-size: 1rem;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    display: inline-block; /* 使按钮为块级元素 */
+}
+
+.btn-danger {
+    background: linear-gradient(90deg, #ff4e50, #fc913a); /* 渐变背景 */
+    color: white;
+}
+
+.btn-danger:hover {
+    background: linear-gradient(90deg, #fc913a, #ff4e50); /* 悬停效果 */
+    transform: scale(1.05); /* 悬停时稍微放大 */
+}
+
+.btn-success {
+    background: linear-gradient(90deg, #56ab2f, #a8e063); /* 渐变背景 */
+    color: white;
+}
+
+.btn-success:hover {
+    background: linear-gradient(90deg, #a8e063, #56ab2f); /* 悬停效果 */
+    transform: scale(1.05); /* 悬停时稍微放大 */
+}
+
+/* 按钮禁用状态 */
+.btn:disabled {
+    background-color: #ccc; /* 禁用时颜色 */
+    cursor: not-allowed; /* 改变光标 */
+}
+/*分页*/
+#pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+#pagination button {
+    margin: 0 5px;
+    padding: 10px 15px;
+    border: none;
+    background-color: #007bff;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+#pagination button:hover {
+    background-color: #0056b3;
+}
+
+#pagination button.active {
+    background-color: #0056b3; /* 当前页的背景色 */
+    color: white; /* 当前页的字体颜色 */
+}
+.login-link {
+    color: white;              /* 设置文字颜色为白色 */
+    text-decoration: none;     /* 去掉链接下划线 */
+    font-size: 20px;           /* 可以根据需要调整字体大小 */
+    padding: 10px 20px;        /* 可以根据需要调整内边距 */
+    position: absolute;        /* 使用绝对定位来实现右对齐 */
+    right: 80px;               /* 距离右边缘20px */
+    top: 10px;                 /* 距离顶部10px（可根据需要调整） */
+    display: inline-block;
+}
+.login-link2 {
+    color: white;              /* 设置文字颜色为白色 */
+    text-decoration: none;     /* 去掉链接下划线 */
+    font-size: 20px;           /* 可以根据需要调整字体大小 */
+    padding: 10px 20px;        /* 可以根据需要调整内边距 */
+    position: absolute;        /* 使用绝对定位来实现右对齐 */
+    right: 20px;               /* 距离右边缘20px */
+    top: 10px;                 /* 距离顶部10px（可根据需要调整） */
+    display: inline-block;
+}
+
+
+/* 抽屉容器 */
+#drawer-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: none;
+  z-index: 1000;
+}
+
+/* 抽屉内容 */
+#drawer {
+    position: fixed;
+    top: 0;
+    left: -300px; /* 默认隐藏 */
+    width: 300px;
+    height: 100%;
+    background-image: url('/static/images/抽屉.png');
+    background-color: transparent;
+    opacity: 0.8;
+    z-index: 1001; /* 抽屉层级应高于遮罩 */
+    transition: left 0.3s ease;
+}
+
+/* 抽屉关闭按钮 */
+#close-drawer {
+  background: none;
+  border: none;
+  font-size: 24px;
+  color: #333;
+  cursor: pointer;
+}
+
+/* 背景遮罩 */
+#overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.setting {
+    float: left;
+    background-color: transparent; /* 背景透明 */
+}
+.setting:hover {
+
+}
+
+
+#open-drawer {
+    margin-left: 10px;
+    cursor: pointer;
+    background: transparent; /* 按钮背景透明 */
+    border: none; /* 去掉按钮边框 */
+    padding: 0; /* 去掉内边距 */
+    display: flex;
+    transform: scale(2);  /* 放大按钮1.5倍 */
+    transform-origin: center;  /* 确保按钮在中心放大 */
+
+}
+#open-drawer:hover{
+    cursor: pointer;
+}
+
+#open-drawer svg {
+    color: white;
+}
+
+
+
+
+
+/* 基本样式 */
+nav {
+    padding: 10px 20px;      /* 上下内边距 10px，左右内边距 20px */
+    text-align: center;      /* 文本居中 */
+    background: none;
+}
+
+nav ul {
+    list-style-type: none;   /* 去掉列表的默认样式 */
+    margin: 0;               /* 去掉外边距 */
+    padding: 0;              /* 去掉内边距 */
+}
+
+nav li {
+    margin: 10px 0;          /* 每个菜单项上下有 10px 间隔 */
+}
+
+nav a {
+    color: #333;             /* 字体颜色为深灰色 */
+    text-decoration: none;   /* 去掉默认的下划线 */
+    font-size: 18px;         /* 设置字体大小 */
+    padding: 10px;           /* 增加内边距 */
+    display: block;          /* 让每个链接独占一行 */
+    transition: background-color 0.3s; /* 添加过渡效果 */
+}
+
+/* 鼠标悬停时的效果 */
+nav a:hover {
+    background-color: #f0f0f0;  /* 悬停时改变背景色 */
+}
+
+/* 活跃状态 */
+nav a:active {
+    background-color: #ddd;  /* 点击时背景色变化 */
+}
+
+

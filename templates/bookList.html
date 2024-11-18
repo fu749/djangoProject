@@ -12,7 +12,8 @@
             font-family: Arial, sans-serif;
         }
         body {
-            background-color: #e9ecef;
+            background-image: url("/static/video/背景.gif");
+            opacity: 0.8;
             display: flex;
             flex-direction: column;
             min-height: 100vh;
@@ -180,6 +181,7 @@
                     <tr>
                         <th>书名</th>
                         <th>借阅时间</th>
+                        <th>剩余时间</th>
                         <th>操作</th>
                     </tr>
                 </thead>
@@ -189,6 +191,7 @@
                         <tr>
                             <td>{{ book.name }}</td>
                             <td>{{ book.borrowDate }}</td>
+                            <td>{{ book.remainingTime }}天</td>
                          <td>
                              <form action="{% url 'back_Book' book_name=book.name %}" method="post">
                               {% csrf_token %}
@@ -198,7 +201,7 @@
                         </tr>
                     {% empty %}
                         <tr>
-                            <td colspan="3">未找到借阅记录</td>
+                            <td colspan="4">未找到借阅记录</td>
                         </tr>
 
                     {% endfor %}
@@ -209,7 +212,7 @@
         </div>
     </main>
     <footer>
-        2024 图书管理系统
+        5028天才练习生
     </footer>
 
     <script>

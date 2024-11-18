@@ -24,5 +24,5 @@ def borrow_Book(request, book_id):  # 参数名修改为 book_id
         return JsonResponse({'message': '未登录请先登录!'}, status=200)
     else:
         print(3)
-        return JsonResponse({'message': f'成功借阅{book}！'},status=200)
+        return JsonResponse({'message': f'成功借阅{book}！\n7天之内记得归还，逾期将被列为黑名单'},status=200)
 

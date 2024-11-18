@@ -43,4 +43,5 @@ urlpatterns = [
     path('Collection_List/', CollectionList, name='Collection_List'),
     path('back_Book/<str:book_name>/', return_Books, name='back_Book'),
     path('unCollection/<int:book_id>/', unCollection, name='unCollection'),
+    path('test/', test, name='test'),
 ]
