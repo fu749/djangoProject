@@ -1,9 +1,8 @@
-from django.http import JsonResponse
 from django.shortcuts import render
+from datetime import datetime, timedelta
 
 from borrowBooks.lookBorrowBook import lookBorrowBook
 from function1.loginName import rd_online
-from function2.searchBook import searchBook_t
 
 def Book_List(request):
     user = rd_online()
@@ -26,15 +25,32 @@ def Book_List(request):
 
                 # 确保包含书名和借阅日期
                 if '图书ID' in book_info and '借书时间' in book_info:
-                    book_info_list.append({
-                        'name': book_info['图书ID'],
-                        'borrowDate': book_info['借书时间'],
-                    })
+                    borrow_date_str = book_info['借书时间']  # 借书时间字符串
+                    try:
+                        # 假设日期格式为 "YYYY-MM-DD HH:MM:SS"
+                        borrow_date = datetime.strptime(borrow_date_str, "%Y-%m-%d %H:%M:%S")
+                        current_date = datetime.now()
 
+                        # 计算剩余时间，假设借阅期限为 7 天
+                        deadline = borrow_date + timedelta(days=7)
+                        remaining_time = (deadline - current_date).days  # 剩余天数
+
+                        # 如果剩余天数小于 0，表示已经过期
+                        if remaining_time < 0:
+                            remaining_time = 0
+
+                        # 添加到书籍信息中
+                        book_info_list.append({
+                            'name': book_info['图书ID'],
+                            'borrowDate': borrow_date_str,
+                            'remainingTime': remaining_time,  # 剩余时间（天）
+                        })
+                    except ValueError:
+                        # 如果日期格式不正确，跳过此条记录
+                        continue
 
         # 格式化响应数据
         response_data = {
             'results': book_info_list,
         }
-        print(response_data)
         return render(request, 'bookList.html', {'user': user, 'books': response_data['results']})

@@ -3,244 +3,34 @@
     <head>
         <meta charset="UTF-8">
         <title>图书管理系统</title>
-        <style>
-            /* 通用样式 */
-            * {
-                box-sizing: border-box;
-                margin: 0;
-                padding: 0;
-                font-family: Arial, sans-serif;
-            }
-            body {
-                background-color: #e9ecef;
-                display: flex;
-                flex-direction: column;
-                min-height: 100vh;
-            }
-            header {
-                background-color: #35424a;
-                color: #ffffff;
-                padding: 20px;
-                text-align: center;
-                font-size: 1.5rem;
-                font-weight: bold;
-            }
-            footer {
-                background-color: #35424a;
-                color: #ffffff;
-                padding: 10px;
-                text-align: center;
-                font-size: 0.9rem;
-                margin-top: auto;
-            }
-            main {
-                display: flex;
-                flex: 1;
-                margin: 20px auto;
-                max-width: 1200px;
-                width: 100%;
-            }
-    
-            /* 侧边导航栏样式 */
-            nav {
-                width: 250px;
-                background: #35424a;
-                padding: 20px;
-                border-radius: 8px;
-                box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-                display: flex;
-                flex-direction: column;
-            }
-            nav ul {
-                list-style: none;
-                padding: 0;
-            }
-            nav ul li {
-                margin: 10px 0;
-            }
-            nav ul li a {
-                color: #ffffff;
-                text-decoration: none;
-                font-size: 1.1rem;
-                padding: 12px 15px;
-                border-radius: 5px;
-                display: block;
-                transition: background 0.3s;
-            }
-            nav ul li a:hover {
-                background-color: #3a4d58;
-            }
-    
-            /* 内容区域样式 */
-            .content {
-                flex: 1;
-                margin-left: 20px;
-                padding: 20px;
-                background: #ffffff;
-                border-radius: 8px;
-                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            }
-    
-            .search-module {
-                margin-bottom: 20px;
-            }
-            .search-container {
-                display: flex;
-                align-items: center;
-                gap: 10px;
-            }
-            .search-container input[type="text"] {
-                flex: 1;
-                padding: 10px;
-                font-size: 1rem;
-                border: 1px solid #ccc;
-                border-radius: 5px;
-                transition: border-color 0.3s;
-            }
-            .search-container input[type="text"]:focus {
-                border-color: #007bff;
-                outline: none;
-            }
-            .search-container button {
-                padding: 10px 20px;
-                font-size: 1rem;
-                border: none;
-                border-radius: 5px;
-                background: #007bff;
-                color: white;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-            .search-container button:hover {
-                background: #0056b3;
-            }
-    
-            /* 搜索结果样式 */
-            .content_head {
-                padding: 15px;
-                font-size: 1.1rem;
-                color: #333;
-            }
-            .content_head p {
-                padding: 15px;
-                border: 1px solid #e0e0e0;
-                background-color: #f8f9fa;
-                border-radius: 5px;
-            }
-    
-            /* 表格样式 */
-            table {
-                width: 100%;
-                border-collapse: collapse;
-                margin-top: 20px;
-            }
-            th, td {
-                border: 1px solid #e0e0e0;
-                padding: 10px;
-                text-align: center;
-            }
-            th {
-                background-color: #f2f2f2;
-            }
-            
-            /* 按钮样式 */
-            .btn {
-                padding: 10px 20px;
-                font-size: 1rem;
-                border: none;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background 0.3s, transform 0.2s;
-                display: inline-block; /* 使按钮为块级元素 */
-            }
-        
-            .btn-danger {
-                background: linear-gradient(90deg, #ff4e50, #fc913a); /* 渐变背景 */
-                color: white;
-            }
-        
-            .btn-danger:hover {
-                background: linear-gradient(90deg, #fc913a, #ff4e50); /* 悬停效果 */
-                transform: scale(1.05); /* 悬停时稍微放大 */
-            }
-        
-            .btn-success {
-                background: linear-gradient(90deg, #56ab2f, #a8e063); /* 渐变背景 */
-                color: white;
-            }
-        
-            .btn-success:hover {
-                background: linear-gradient(90deg, #a8e063, #56ab2f); /* 悬停效果 */
-                transform: scale(1.05); /* 悬停时稍微放大 */
-            }
-        
-            /* 按钮禁用状态 */
-            .btn:disabled {
-                background-color: #ccc; /* 禁用时颜色 */
-                cursor: not-allowed; /* 改变光标 */
-            }
-            /*分页*/
-            #pagination {
-                margin-top: 20px;
-                text-align: center;
-            }
-
-            #pagination button {
-                margin: 0 5px;
-                padding: 10px 15px;
-                border: none;
-                background-color: #007bff;
-                color: white;
-                border-radius: 5px;
-                cursor: pointer;
-                transition: background 0.3s;
-            }
-
-            #pagination button:hover {
-                background-color: #0056b3;
-            }
-
-            #pagination button.active {
-                background-color: #0056b3; /* 当前页的背景色 */
-                color: white; /* 当前页的字体颜色 */
-            }
-            .login-link {
-                color: white;              /* 设置文字颜色为白色 */
-                text-decoration: none;     /* 去掉链接下划线 */
-                font-size: 20px;           /* 可以根据需要调整字体大小 */
-                padding: 10px 20px;        /* 可以根据需要调整内边距 */
-                position: absolute;        /* 使用绝对定位来实现右对齐 */
-                right: 80px;               /* 距离右边缘20px */
-                top: 10px;                 /* 距离顶部10px（可根据需要调整） */
-                display: inline-block;
-            }
-            .login-link2 {
-                color: white;              /* 设置文字颜色为白色 */
-                text-decoration: none;     /* 去掉链接下划线 */
-                font-size: 20px;           /* 可以根据需要调整字体大小 */
-                padding: 10px 20px;        /* 可以根据需要调整内边距 */
-                position: absolute;        /* 使用绝对定位来实现右对齐 */
-                right: 20px;               /* 距离右边缘20px */
-                top: 10px;                 /* 距离顶部10px（可根据需要调整） */
-                display: inline-block;
-            }
-
-        </style>
+         <link rel="stylesheet" href="/static/css/index.css">
+        <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     </head>
+
     <body>
         <header>
-            欢迎来到图书管理系统
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <div class="drawer-menu">
+                <ul>
+                    <li><a href="/Book_List/">我的借阅</a></li>
+                    <li><a href="/Collection_List/">收藏的图书</a></li>
+                    <li><a href="/Collection_List/">修改密码</a></li>
+                    <li><a href="/test/">个人中心</a></li>
+                    <li><a href="/loginAdmin/">系统设置</a></li>
+                </ul>
+            </div>
+            
+            图书管理系统
             <a href="/login/" class="login-link" id="loginLink">登录</a>
             <span id="userGreeting" class="login-link" style="display:none;"></span>
             <a href="/loginOut/" class="login-link2" id="logoutLink">登出</a>
         </header>
         <main>
-            <nav>
-                <ul>
-                    <li><a href="/Book_List/">我的借阅</a></li>
-                    <li><a href="/favorites/">收藏的图书</a></li>
-                </ul>
-            </nav>
+             
             <div class="content">
                 <div class="search-module">
                     <div class="search-container">
@@ -249,7 +39,7 @@
                     </div>
                 </div>
                 <div class="content_head">
-                    <p id="resultDisplay">该系统帮助用户管理图书，包括借书、还书和收藏功能。</p>
+                    <p id="resultDisplay">该系统是5028团队呕心沥血打造，用于帮助用户管理图书，包括借书、还书和收藏功能。</p>
                 </div>
                 <table id="resultsTable" style="display:none;">
                     <thead>
@@ -267,21 +57,34 @@
             </div>
         </main>
         <footer>
-            2024 图书管理系统
+            5028专业团队耗时2年半精心设计
         </footer>
-
-
-
-
-
-
-
-
-
-
-
-
         <script>
+
+            function toggleMenu() {
+                const menu = document.querySelector('.drawer-menu');
+                const toggle = document.querySelector('.menu-toggle');
+
+                // 切换菜单和切换按钮的状态
+                menu.classList.toggle('open');
+                toggle.classList.toggle('active');
+            }
+
+            // 添加点击菜单外部关闭菜单的功能
+            document.addEventListener('click', function(event) {
+                const menu = document.querySelector('.drawer-menu');
+                const toggle = document.querySelector('.menu-toggle');
+
+                // 检查点击是否在菜单和切换按钮之外
+                if (menu.classList.contains('open') &&
+                    !menu.contains(event.target) &&
+                    !toggle.contains(event.target)) {
+                    menu.classList.remove('open');
+                    toggle.classList.remove('active');
+                }
+            });
+
+            
             const user = "{{ user|default:'' }}";// Django模板语法示例，其他框架类似
             if (user&&user!="没有找到数据") {
                 // 如果用户已登录，隐藏登录链接，显示用户名和登出链接
@@ -293,10 +96,6 @@
                 // 如果用户没有登录，显示登录链接
                 document.getElementById('loginLink').style.display = 'inline-block';
             }
-
-
-
-
 
             let currentPage = 1; // 当前页
             const pageSize = 10;
@@ -327,7 +126,7 @@
                                 <td>${book.author}</td>
                                 <td>
                                     <a class="btn btn-danger" onclick="borrowBook(${book.id}, this)">借书</a>
-                                    <a class="btn btn-success" href="/collection/${book.id}">收藏</a>
+                                    <a class="btn btn-success" onclick="collection(${book.id}, this)">收藏</a>
                                 </td>
                             `;
                             resultsBody.appendChild(row);
@@ -383,6 +182,39 @@
             
             
             
+            function collection(bookId, button) {
+                fetch(`/collection/${bookId}/`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken')  // 获取 CSRF token
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        return response.json();
+                    } else {
+                        throw new Error('借书失败');
+                    }
+                })
+                .then(data => {
+                    // 更新按钮文本为“已借阅”
+                    if (data.message === "没有登录不能操作") {
+                        button.innerText = '未登录';
+                        button.disabled = true;
+                    }else{
+                        button.innerText = '已收藏';
+                    }
+                    button.disabled = true; // 禁用按钮
+
+                    alert(data.message); // 显示成功消息
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('收藏过程中发生错误，请重试。');
+                });
+            }
+            
             function borrowBook(bookId, button) {
                 fetch(`/borrow/${bookId}/`, {
                     method: 'POST',
@@ -434,6 +266,5 @@
                 return cookieValue;
             }
         </script>
-    
     </body>
     </html>

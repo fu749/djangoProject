@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>administrator</title>
+    <link rel="stylesheet" href="/static/css/admin/login.css">
+</head>
+
+<body>
+    <div class="main">
+        <div class="background">
+            <div class="login-block">
+                <a href="/" class="title">返回</a>
+                <p class="login-title">Admin - Login</p>
+                <form class="login-form" action="/Admin/" method="POST">
+                    {% csrf_token %}
+                    <input type="text" name="username" class="username" placeholder="用户名" autocomplete="off" required>
+                    <input type="password" name="password" class="password" placeholder="密码" autocomplete="off" required>
+                    <button type="submit" class="login-button">登录</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
