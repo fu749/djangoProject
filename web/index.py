@@ -10,4 +10,4 @@ def index(request):
     return render(request, 'index.html',{'user': user})  # 渲染 index.html 模板
 
 def test(request):
-    return render(request, '作业brandelement.html')  # 渲染 index.html 模板
+    return render(request, 'admin/index.html')  # 渲染 index.html 模板

@@ -15,6 +15,8 @@ body {
     min-height: 100vh;
 }
 header {
+    margin: 0;
+    font-family: Arial, sans-serif;
     background-color: #35424a;
     color: #ffffff;
     padding: 20px;
@@ -41,35 +43,7 @@ main {
     opacity: 0.8;
 }
 
-/* 侧边导航栏样式 */
-nav {
-    width: 250px;
-    background: #35424a;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-}
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-nav ul li {
-    margin: 10px 0;
-}
-nav ul li a {
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 1.1rem;
-    padding: 12px 15px;
-    border-radius: 5px;
-    display: block;
-    transition: background 0.3s;
-}
-nav ul li a:hover {
-    background-color: #3a4d58;
-}
+
 
 /* 内容区域样式 */
 .content {
@@ -226,117 +200,104 @@ th {
 }
 
 
-/* 抽屉容器 */
-#drawer-container {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  display: none;
-  z-index: 1000;
-}
 
-/* 抽屉内容 */
-#drawer {
+.drawer-menu {
+    height: 100%;
+    width: 250px;
     position: fixed;
     top: 0;
-    left: -300px; /* 默认隐藏 */
-    width: 300px;
-    height: 100%;
-    background-image: url('/static/images/抽屉.png');
-    background-color: transparent;
-    opacity: 0.8;
-    z-index: 1001; /* 抽屉层级应高于遮罩 */
-    transition: left 0.3s ease;
+    left: -250px;
+    background-color: #f1f1f1;
+    transition: 0.3s;
+    z-index: 1000;
 }
 
-/* 抽屉关闭按钮 */
-#close-drawer {
-  background: none;
-  border: none;
-  font-size: 24px;
-  color: #333;
-  cursor: pointer;
+.drawer-menu.open {
+    left: 0;
 }
 
-/* 背景遮罩 */
-#overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: opacity 0.3s ease;
+.drawer-menu ul {
+    margin-top: 30px;
+    list-style-type: none;
+    padding: 20px;
 }
 
-.setting {
-    float: left;
-    background-color: transparent; /* 背景透明 */
-}
-.setting:hover {
-
+.drawer-menu ul li {
+    padding: 10px 0;
+    border-bottom: 1px solid #ddd;
 }
 
+.drawer-menu ul li a {
+    text-decoration: none;
+    color: #333;
+    display: block;
+}
 
-#open-drawer {
-    margin-left: 10px;
+.drawer-menu ul li a:hover {
+    color: #007bff;
+}
+
+/* 菜单切换按钮 */
+.menu-toggle {
+    position: fixed;
+    top: 15px;
+    left: 15px;
     cursor: pointer;
-    background: transparent; /* 按钮背景透明 */
-    border: none; /* 去掉按钮边框 */
-    padding: 0; /* 去掉内边距 */
+    z-index: 1001;
     display: flex;
-    transform: scale(2);  /* 放大按钮1.5倍 */
-    transform-origin: center;  /* 确保按钮在中心放大 */
-
-}
-#open-drawer:hover{
-    cursor: pointer;
-}
-
-#open-drawer svg {
-    color: white;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    width: 40px;
+    height: 40px;
+    transition: background-color 0.3s;
 }
 
 
-
-
-
-/* 基本样式 */
-nav {
-    padding: 10px 20px;      /* 上下内边距 10px，左右内边距 20px */
-    text-align: center;      /* 文本居中 */
-    background: none;
+.menu-toggle div {
+    width: 30px;
+    height: 3px;
+    background-color: black;
+    position: absolute;
+    transition: 0.3s ease;
 }
 
-nav ul {
-    list-style-type: none;   /* 去掉列表的默认样式 */
-    margin: 0;               /* 去掉外边距 */
-    padding: 0;              /* 去掉内边距 */
+.menu-toggle:not(.active) .bar1{
+    top: 25%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -1.5px;
+}
+.menu-toggle:not(.active) .bar2 {
+    top: 75%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -1.5px;
 }
 
-nav li {
-    margin: 10px 0;          /* 每个菜单项上下有 10px 间隔 */
+.menu-toggle.active .bar1 {
+    top: 50%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -1.5px;
+    transform: rotate(45deg);
 }
 
-nav a {
-    color: #333;             /* 字体颜色为深灰色 */
-    text-decoration: none;   /* 去掉默认的下划线 */
-    font-size: 18px;         /* 设置字体大小 */
-    padding: 10px;           /* 增加内边距 */
-    display: block;          /* 让每个链接独占一行 */
-    transition: background-color 0.3s; /* 添加过渡效果 */
+.menu-toggle.active .bar2 {
+    top: 50%;
+    left: 50%;
+    margin-left: -15px;
+    margin-top: -1.5px;
+    transform: rotate(-45deg);
 }
 
-/* 鼠标悬停时的效果 */
-nav a:hover {
-    background-color: #f0f0f0;  /* 悬停时改变背景色 */
+.menu-toggle.active .bar3 {
+    opacity: 0;
 }
 
-/* 活跃状态 */
-nav a:active {
-    background-color: #ddd;  /* 点击时背景色变化 */
-}
+
+
+
+
 
 

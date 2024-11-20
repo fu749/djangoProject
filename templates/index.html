@@ -6,34 +6,31 @@
          <link rel="stylesheet" href="/static/css/index.css">
         <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
     </head>
+
     <body>
         <header>
-           <span class = "setting"><button id="open-drawer">
-               <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" focusable="false" class="qnMXfrje" style="font-size: 28px;"><path fill-rule="evenodd" clip-rule="evenodd" d="M17 8.75H7V7.25H17V8.75ZM17 12.75H7V11.25H17V12.75ZM7 16.75H17V15.25H7V16.75Z" fill="currentColor"></path></svg>
-           </button></span>
+            <div class="menu-toggle" onclick="toggleMenu()">
+                <div class="bar1"></div>
+                <div class="bar2"></div>
+                <div class="bar3"></div>
+            </div>
+            <div class="drawer-menu">
+                <ul>
+                    <li><a href="/Book_List/">我的借阅</a></li>
+                    <li><a href="/Collection_List/">收藏的图书</a></li>
+                    <li><a href="/Collection_List/">修改密码</a></li>
+                    <li><a href="/test/">个人中心</a></li>
+                    <li><a href="/loginAdmin/">系统设置</a></li>
+                </ul>
+            </div>
+            
             图书管理系统
             <a href="/login/" class="login-link" id="loginLink">登录</a>
             <span id="userGreeting" class="login-link" style="display:none;"></span>
             <a href="/loginOut/" class="login-link2" id="logoutLink">登出</a>
         </header>
         <main>
-            <div id="drawer-container">
-              <div id="drawer">
-                <button id="close-drawer">×</button>
-                <h1 style="text-align: center;">更多功能</h1>
-                <nav>
-                    <ul>
-                        <li><a href="/Book_List/">我的借阅</a></li>
-                        <li><a href="/Collection_List/">收藏的图书</a></li>
-                    </ul>
-                </nav>
-              </div>
-              <div id="overlay"></div>
-            </div>
-            
-            
-
-            
+             
             <div class="content">
                 <div class="search-module">
                     <div class="search-container">
@@ -63,32 +60,29 @@
             5028专业团队耗时2年半精心设计
         </footer>
         <script>
-            document.addEventListener("DOMContentLoaded", () => {
-              const drawer = document.getElementById("drawer");
-              const overlay = document.getElementById("overlay");
-              const drawerContainer = document.getElementById("drawer-container");
-              const openButton = document.getElementById("open-drawer");
-              const closeButton = document.getElementById("close-drawer");
-            
-              const openDrawer = () => {
-                drawer.style.left = "0";
-                overlay.style.opacity = "1";
-                drawerContainer.style.display = "block";
-              };
-            
-              const closeDrawer = () => {
-                drawer.style.left = "-300px";
-                overlay.style.opacity = "0";
-                setTimeout(() => {
-                  drawerContainer.style.display = "none";
-                }, 300);
-              };
-            
-              openButton.addEventListener("click", openDrawer);
-              closeButton.addEventListener("click", closeDrawer);
-              overlay.addEventListener("click", closeDrawer);
-            });
 
+            function toggleMenu() {
+                const menu = document.querySelector('.drawer-menu');
+                const toggle = document.querySelector('.menu-toggle');
+
+                // 切换菜单和切换按钮的状态
+                menu.classList.toggle('open');
+                toggle.classList.toggle('active');
+            }
+
+            // 添加点击菜单外部关闭菜单的功能
+            document.addEventListener('click', function(event) {
+                const menu = document.querySelector('.drawer-menu');
+                const toggle = document.querySelector('.menu-toggle');
+
+                // 检查点击是否在菜单和切换按钮之外
+                if (menu.classList.contains('open') &&
+                    !menu.contains(event.target) &&
+                    !toggle.contains(event.target)) {
+                    menu.classList.remove('open');
+                    toggle.classList.remove('active');
+                }
+            });
 
             
             const user = "{{ user|default:'' }}";// Django模板语法示例，其他框架类似
@@ -271,9 +265,6 @@
                 }
                 return cookieValue;
             }
-            
-
-
         </script>
     </body>
     </html>

@@ -18,6 +18,7 @@ from django.contrib import admin
 from django.urls import path
 
 from CollectionList import CollectionList
+from admin.login import admin,loginAdmin
 from back_Book import return_Books
 from bookList import Book_List
 from borrowBooks.returnBooks import returnBooks
@@ -44,4 +45,8 @@ urlpatterns = [
     path('back_Book/<str:book_name>/', return_Books, name='back_Book'),
     path('unCollection/<int:book_id>/', unCollection, name='unCollection'),
     path('test/', test, name='test'),
+
+    path('loginAdmin/', loginAdmin , name='loginAdmin'),
+    path('Admin/', admin, name='Admin'),
+
 ]
