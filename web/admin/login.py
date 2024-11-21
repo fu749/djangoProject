@@ -15,3 +15,5 @@ def admin(request):
             return render(request, 'admin/index.html')
     return render(request, 'admin/login.html')
 
+
+

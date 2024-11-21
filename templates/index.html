@@ -8,6 +8,31 @@
     </head>
 
     <body>
+    
+    <div id="passwordOverlay" class="hidden">
+        <div class="password-modal">
+            <h2>修改密码</h2>
+            <form id="passwordForm">
+                <label for="currentPassword">当前密码：</label>
+                <input type="password" id="currentPassword" name="currentPassword" required>
+                
+                <label for="newPassword">新密码：</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+                
+                <label for="confirmPassword">确认密码：</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+                
+                <div class="buttons">
+                    <button type="button" id="cancelPasswordChange">取消</button>
+                    <button type="submit">确认</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    
+    
+    
         <header>
             <div class="menu-toggle" onclick="toggleMenu()">
                 <div class="bar1"></div>
@@ -18,12 +43,11 @@
                 <ul>
                     <li><a href="/Book_List/">我的借阅</a></li>
                     <li><a href="/Collection_List/">收藏的图书</a></li>
-                    <li><a href="/Collection_List/">修改密码</a></li>
+                    <li><a href="#" id="resetPassword">修改密码</a></li>
                     <li><a href="/test/">个人中心</a></li>
                     <li><a href="/loginAdmin/">系统设置</a></li>
                 </ul>
             </div>
-            
             图书管理系统
             <a href="/login/" class="login-link" id="loginLink">登录</a>
             <span id="userGreeting" class="login-link" style="display:none;"></span>
@@ -59,8 +83,9 @@
         <footer>
             5028专业团队耗时2年半精心设计
         </footer>
+        <script src="/static/js/index.js"></script>
         <script>
-
+            
             function toggleMenu() {
                 const menu = document.querySelector('.drawer-menu');
                 const toggle = document.querySelector('.menu-toggle');
@@ -265,6 +290,77 @@
                 }
                 return cookieValue;
             }
+            
+            
+            // 打开遮罩层
+            document.getElementById('resetPassword').addEventListener('click', function (event) {
+            event.preventDefault(); // 阻止链接的默认跳转行为
+            document.getElementById('passwordOverlay').classList.remove('hidden'); // 显示遮罩层
+            });
+            
+            
+            // 关闭遮罩层
+            
+            document.getElementById('cancelPasswordChange').addEventListener('click', function () {
+                document.getElementById('passwordOverlay').classList.add('hidden'); // 隐藏遮罩层
+            });
+            
+            document.getElementById('passwordForm').addEventListener('submit', function (e) {
+                e.preventDefault(); // 阻止表单默认提交
+            
+                // 获取表单数据
+                const currentPassword = document.getElementById('currentPassword').value;
+                const newPassword = document.getElementById('newPassword').value;
+                const confirmPassword = document.getElementById('confirmPassword').value;
+            
+                // 获取用户信息（可以根据你的需求获取）
+                // 检查表单字段是否为空
+                if (!currentPassword || !newPassword || !confirmPassword) {
+                    alert("所有字段都不能为空");
+                    return;
+                }
+            
+                // 检查新密码与确认密码是否匹配
+                if (newPassword !== confirmPassword) {
+                    alert("新密码与确认密码不匹配");
+                    return;
+                }
+            
+                // 发送 AJAX 请求修改密码
+                fetch('/change_password/', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        user: user,
+                        current_password: currentPassword,
+                        new_password: newPassword,
+                        confirm_password: confirmPassword
+                    })
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        // 如果响应不是200，抛出错误
+                        throw new Error('网络错误');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    if (data.success) {
+                        alert("密码修改成功");
+                        document.getElementById('passwordOverlay').classList.add('hidden'); // 隐藏修改密码的遮罩层
+                    } else {
+                        alert("密码修改失败: " + data.message);
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('修改密码时发生错误，请重试。');
+                });
+            });
+
+
         </script>
     </body>
     </html>

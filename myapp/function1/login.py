@@ -27,4 +27,3 @@ def login_Admin(rname):
     else:
         # 如果没有找到匹配的记录，返回 None 或空
         return None
-
