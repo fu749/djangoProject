@@ -15,7 +15,7 @@ def user_list():
         return None
 
 
-def balck_list():
+def black_list():
     query = "SELECT RD_NAME FROM blacklist"
     params = {}
     # 调用执行查询函数

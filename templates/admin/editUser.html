@@ -54,10 +54,14 @@
             background-color: #f44336;
             color: white;
         }
+        .sidebar li.active{
+            background-color: #e6f3ff;
+        }
     </style>
     <link rel="stylesheet" href="/static/css/admin/index.css">
 </head>
 <body>
+<div class="container">
 <header class="header">
         <div class="logo">
             <img src="/static/images/头像.png" style="border-radius: 50%;" alt="系统Logo">
@@ -80,8 +84,8 @@
                         <span>用户管理</span>
                     </a>
                 </li>
-                <li>
-                    <a href="/test/" class="active">
+                <li class="active">
+                    <a href="/test/" >
                         <span>角色管理</span>
                     </a>
                 </li>
@@ -94,130 +98,97 @@
         </aside>
 
 
+ <main class="content">
+    <div class="edit-container">
+        <h2>编辑用户信息</h2>
+        <form id="userEditForm">
+            <input type="hidden" id="userId" name="userId" value="{{ id }}">
 
-<div class="edit-container">
-    <h2>编辑用户信息</h2>
-    <form id="userEditForm">
-        <input type="hidden" id="userId" name="userId">
+            <div class="form-group">
+                <label for="username">用户名</label>
+                <input type="text" id="username" name="username" required value="{{ username }}">
+            </div>
 
-        <div class="form-group">
-            <label for="username">用户名</label>
-            <input type="text" id="username" name="username" required>
+            <div class="form-group">
+                <label for="password">密码</label>
+                <input type="password" id="password" name="password" placeholder="留空则不修改密码" value="{{ password }}">
+            </div>
+
+            <div class="form-group">
+                <label for="blacklistStatus">黑名单状态</label>
+                <select id="blacklistStatus" name="blacklistStatus">
+                    <option value="0" {% if state == 0 %}selected{% endif %}>正常</option>
+                    <option value="1" {% if state == 1 %}selected{% endif %}>黑名单</option>
+                </select>
+            </div>
+
+            <div class="btn-container">
+                <button type="button" class="btn btn-save" onclick="saveUser()">确定</button>
+                <button type="button" class="btn btn-cancel" onclick="cancelEdit()">取消</button>
+            </div>
+        </form>
         </div>
-
-        <div class="form-group">
-            <label for="password">密码</label>
-            <input type="password" id="password" name="password" placeholder="留空则不修改密码">
-        </div>
-
-        <div class="form-group">
-            <label for="blacklistStatus">黑名单状态</label>
-            <select id="blacklistStatus" name="blacklistStatus">
-                <option value="false">正常</option>
-                <option value="true">黑名单</option>
-            </select>
-        </div>
-
-        <div class="btn-container">
-            <button type="button" class="btn btn-save" onclick="saveUser()">保存</button>
-            <button type="button" class="btn btn-cancel" onclick="cancelEdit()">取消</button>
-        </div>
-    </form>
-    </div>
+     </main>
 </div>
-
+</div>
+</body>
 <script>
-// 页面加载时获取用户详情
-document.addEventListener('DOMContentLoaded', () => {
-    // 从URL获取用户ID
-    const urlParams = new URLSearchParams(window.location.search);
-    const userId = urlParams.get('id');
+    // 页面加载完成后绑定事件
+    document.addEventListener('DOMContentLoaded', () => {
+        // 获取按钮元素
+        const saveBtn = document.getElementById('saveBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
 
-    if (userId) {
-        fetchUserDetails(userId);
-    }
-});
+        // 绑定保存按钮的点击事件
+        saveBtn.addEventListener('click', saveUser);
 
-// 获取用户详情
-async function fetchUserDetails(userId) {
-    try {
-        const response = await fetch(`/Admin/userDetail/${userId}/`);
-        const userData = await response.json();
+        // 绑定取消按钮的点击事件
+        cancelBtn.addEventListener('click', cancelEdit);
+    });
 
-        // 填充表单
-        document.getElementById('userId').value = userData.id;
-        document.getElementById('username').value = userData.username;
-        document.getElementById('blacklistStatus').value = userData.is_blacklisted.toString();
-    } catch (error) {
-        console.error('获取用户详情失败:', error);
-        alert('获取用户详情失败');
-    }
-}
+    // 保存用户逻辑
+    function saveUser() {
+        // 获取表单数据
+        const userId = document.getElementById('userId').value;
+        const username = document.getElementById('username').value;
+        const password = document.getElementById('password').value;
+        const blacklistStatus = document.getElementById('blacklistStatus').value;
 
-// 保存用户信息
-async function saveUser() {
-    const form = document.getElementById('userEditForm');
-    const userId = form.userId.value;
-    const username = form.username.value;
-    const password = form.password.value;
-    const blacklistStatus = form.blacklistStatus.value === 'true';
+        // 打印数据用于测试
+        console.log('保存用户:', { username, password, blacklistStatus });
 
-    // 构建提交数据
-    const userData = {
-        username: username,
-        is_blacklisted: blacklistStatus
-    };
-
-    // 如果密码非空，则添加到提交数据
-    if (password.trim() !== '') {
-        userData.password = password;
-    }
-
-    try {
-        const response = await fetch(`/Admin/editUser/${userId}/`, {
+        // 在此添加发送数据到服务器的逻辑
+        // 示例：POST 数据
+        fetch('/saveUser/', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'X-CSRFToken': getCookie('csrftoken')  // 假设有获取CSRF token的函数
+                'X-CSRFToken': '{{ csrf_token }}' // 确保 CSRF token 可用
             },
-            body: JSON.stringify(userData)
-        });
-
-        const result = await response.json();
-
-        if (result.status === 'success') {
-            alert('用户信息更新成功');
-            // 跳转回用户列表页
-            window.location.href = '/Admin/userList/';
-        } else {
-            alert('更新失败：' + result.message);
-        }
-    } catch (error) {
-        console.error('保存用户信息失败:', error);
-        alert('保存用户信息失败');
+            body: JSON.stringify({ userId, username, password, blacklistStatus })
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log('服务器返回:', data);
+                // 根据返回结果跳转或提示用户
+                if (data.success) {
+                    alert('保存成功');
+                    window.location.href = '/AdminMain/'; // 跳转回用户管理页面
+                } else {
+                    alert('保存失败: ' + data.message);
+                }
+            })
+            .catch(error => {
+                console.error('保存失败:', error);
+            });
     }
-}
 
-// 取消编辑
-function cancelEdit() {
-    window.location.href = '/Admin/userList/';
-}
-
-// 获取CSRF Token的函数（Django必需）
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+    // 取消编辑逻辑
+    function cancelEdit() {
+        if (confirm('确定取消编辑吗？未保存的更改将会丢失。')) {
+            window.location.href = '/AdminMain/'; // 跳转回用户管理页面
         }
     }
-    return cookieValue;
-}
 </script>
-</body>
+
 </html>

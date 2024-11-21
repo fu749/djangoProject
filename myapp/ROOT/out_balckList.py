@@ -1,6 +1,6 @@
 # main.py
 
-def out_balckList_t(name):
+def out_blackList_t(name):
     from myapp.dao.jdbc import oracleWork
     # 登录
     procedure_name = 'remove_blacklist'

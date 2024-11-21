@@ -4,6 +4,11 @@
     <meta charset="UTF-8">
     <title>图书管理系统</title>
     <link rel="stylesheet" href="/static/css/admin/index.css">
+    <style>
+        .sidebar li.active{
+            background-color: #e6f3ff;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
@@ -16,6 +21,7 @@
         <div class="user-info">
             <button class="logout-btn" onclick="window.location.href='/';">退出</button>
         </div>
+        
     </header>
 
 
@@ -26,7 +32,7 @@
             
             <ul>
                 <li class="active">
-                    <a href="/AdminMain/">
+                    <a href="/AdminMain/" >
                         <span>用户管理</span>
                     </a>
                 </li>
@@ -117,7 +123,7 @@ const renderTable = (users) => {
                 </span>
             </td>
             <td>
-                <button class="btn-edit">编辑</button>
+                <button class="btn-edit" onclick="editUser(${user.uid})">编辑</button>
                 <button class="btn-delete">删除</button>
             </td>
         `;
@@ -160,6 +166,11 @@ document.addEventListener('DOMContentLoaded', () => {
         changePage(currentPage + 1);
     });
 });
+
+const editUser = (userId) => {
+    // 跳转到编辑页面，并传递用户ID作为查询参数
+    window.location.href = `/editUser?id=${userId}`;
+};
 
 </script>
 </body>

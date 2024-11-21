@@ -3,6 +3,7 @@
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/myapp/ROOT/user_list.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/myapp/function1/login.py" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/myapp/function1/userService.py" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/myapp/function3/resetPassword.py" dialect="GenericSQL" />
   </component>
 </project>

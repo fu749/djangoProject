@@ -18,8 +18,10 @@ from django.contrib import admin
 from django.urls import path
 
 from CollectionList import CollectionList
+from admin.editUser import editUser
 from admin.login import admin, loginAdmin
 from admin.main import adminMain
+from admin.saveUser import saveUser
 from admin.userListServlet import userList
 from back_Book import return_Books
 from bookList import Book_List
@@ -53,5 +55,6 @@ urlpatterns = [
     path('Admin/', admin, name='Admin'),
     path('AdminMain/', adminMain, name='AdminMain'),
     path('Admin/userList/', userList, name='userList'),
-
+    path('editUser/', editUser, name='editUser'),
+    path('saveUser/', saveUser, name='saveUser'),
 ]
