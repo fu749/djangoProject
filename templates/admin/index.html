@@ -37,13 +37,13 @@
                     </a>
                 </li>
                 <li>
-                    <a href="/test/">
+                    <a href="/change_user/">
                         <span>角色管理</span>
                     </a>
                 </li>
                 <li>
-                    <a href="#">
-                        <span>系统设置</span>
+                    <a href="/toEditBooks/">
+                        <span>图书管理</span>
                     </a>
                 </li>
             </ul>
@@ -58,8 +58,8 @@
                     <button class="search-btn">搜索</button>
                 </div>
                 <div class="action-buttons">
-                    <button class="btn-export">拉入黑名单</button>
-                    <button class="btn-delete">移出黑名单</button>
+                    <button class="btn-export" onclick="batchAddToBlacklist()">拉入黑名单</button>
+                    <button class="btn-delete" onclick="batchRemoveFromBlacklist()">取消黑名单</button>
                 </div>
             </div>
 
@@ -113,7 +113,7 @@ const renderTable = (users) => {
     users.forEach((user, index) => {
         const tr = document.createElement('tr');
         tr.innerHTML = `
-            <td><input type="checkbox"></td>
+            <td><input type="checkbox" class="select-user" value="${user.username}"></td>
             <td>${user.uid}</td>
             <td>${user.username}</td>
             <td>${user.password}</td>
@@ -124,10 +124,29 @@ const renderTable = (users) => {
             </td>
             <td>
                 <button class="btn-edit" onclick="editUser(${user.uid})">编辑</button>
-                <button class="btn-delete">删除</button>
+                <button class="btn-delete" onclick="deleteUser(${user.uid})">删除</button>
             </td>
         `;
         tbody.appendChild(tr);
+    });
+    
+    
+    // 更新全选框的事件监听
+    const selectAllCheckbox = document.querySelector('.select-all');
+    selectAllCheckbox.addEventListener('change', (event) => {
+        const userCheckboxes = document.querySelectorAll('.select-user');
+        userCheckboxes.forEach((checkbox) => {
+            checkbox.checked = event.target.checked;
+        });
+    });
+
+    // 绑定用户复选框事件
+    const userCheckboxes = document.querySelectorAll('.select-user');
+    userCheckboxes.forEach((checkbox) => {
+        checkbox.addEventListener('change', () => {
+            // 如果有一个复选框没有被选中，则取消全选框的勾选
+            selectAllCheckbox.checked = [...userCheckboxes].every(checkbox => checkbox.checked);
+        });
     });
 };
 
@@ -171,7 +190,112 @@ const editUser = (userId) => {
     // 跳转到编辑页面，并传递用户ID作为查询参数
     window.location.href = `/editUser?id=${userId}`;
 };
+     
 
+     
+
+const deleteUser = async (userId) => {
+    // 弹出确认框，询问用户是否确定删除
+    const isConfirmed = confirm(`确定要删除id为${userId}的用户吗？`);
+    // 如果用户点击了确认按钮
+    if (isConfirmed) {
+        try {
+            const response = await fetch(`/deleteUser/${userId}/`, {
+                method: 'DELETE',
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert(data.message);
+                // 刷新表格数据
+                fetchData(currentPage);
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('删除用户失败:', error);
+            alert('删除失败');
+        }
+    } else {
+        // 如果用户点击取消，则不执行删除操作
+        console.log('删除操作被取消');
+    }
+};
+
+const batchAddToBlacklist = async () => {
+    // 获取选中的用户 ID
+    const selectedCheckboxes = document.querySelectorAll('.select-user:checked');
+    const selectedUserIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+    if (selectedUserIds.length === 0) {
+        alert('请先选择用户！');
+        return;
+    }
+
+    try {
+        // 发送请求到后端
+        const response = await fetch('/batchAddToBlacklist/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_name: selectedUserIds }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(data.message);
+            fetchData(currentPage); // 刷新数据
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('批量拉入黑名单失败:', error);
+        alert('操作失败，请稍后再试');
+    }
+};
+
+
+
+const batchRemoveFromBlacklist = async () => {
+    // 获取选中的用户 ID
+    const selectedCheckboxes = document.querySelectorAll('.select-user:checked');
+    const selectedUserIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+    if (selectedUserIds.length === 0) {
+        alert('请先选择用户！');
+        return;
+    }
+
+    try {
+        // 发送请求到后端
+        const response = await fetch('/batchRemoveFromBlacklist/', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ user_name: selectedUserIds }),
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            alert(data.message);
+            fetchData(currentPage); // 刷新数据
+        } else {
+            alert(data.message);
+        }
+    } catch (error) {
+        console.error('批量取消黑名单失败:', error);
+        alert('操作失败，请稍后再试');
+    }
+};
+
+
+     
+ 
 </script>
 </body>
 </html>
