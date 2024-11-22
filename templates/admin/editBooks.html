@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>图书管理系统</title>
+    <link rel="stylesheet" href="/static/css/admin/index.css">
+    <style>
+        .sidebar li.active{
+            background-color: #e6f3ff;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- 顶部导航栏 -->
+    <header class="header">
+        <div class="logo">
+            <img src="/static/images/头像.png" style="border-radius: 50%;" alt="系统Logo">
+            <span>久别</span>
+        </div>
+        <div class="user-info">
+            <button class="logout-btn" onclick="window.location.href='/';">退出</button>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <div class="main-content">
+        <!-- 左侧菜单 -->
+        <aside class="sidebar">
+            <ul>
+                <li>
+                    <a href="/AdminMain/">
+                        <span>用户管理</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/change_user/">
+                        <span>角色管理</span>
+                    </a>
+                </li>
+                <li class="active">
+                    <a href="/bookManagement/">
+                        <span>图书管理</span>
+                    </a>
+                </li>
+            </ul>
+        </aside>
+
+        <!-- 右侧内容 -->
+        <main class="content">
+            <!-- 图书列表工具栏 -->
+            <div class="toolbar">
+                <div class="search-box">
+                    <input type="text" placeholder="搜索图书">
+                    <button class="search-btn">搜索</button>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn-add" onclick="addBook()">添加图书</button>
+                    <button class="btn-delete" onclick="batchDeleteBooks()">删除图书</button>
+                </div>
+            </div>
+
+            <!-- 图书列表表格 -->
+            <table class="book-table">
+                <thead>
+                <tr>
+                    <th><input type="checkbox" class="select-all"></th>
+                    <th>图书ID</th>
+                    <th>书名</th>
+                    <th>作者</th>
+                    <th>库存</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <!-- 更多图书行 -->
+                </tbody>
+            </table>
+
+            <!-- 分页 -->
+            <div class="pagination">
+                <button class="prev">上一页</button>
+                <span class="page-info">第 1/10 页</span>
+                <button class="next">下一页</button>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script>
+    let currentPage = 1;
+    const totalPages = 10; // 假设你知道总页数
+
+    // 合并后的 fetchData 函数
+    const fetchData = async (page) => {
+        try {
+            const response = await fetch(`/Admin/bookList/?page=${page}`);
+            const data = await response.json();
+            renderTable(data.books); // 假设返回的数据有 books 属性
+            updatePagination(data.current_page, data.total_pages); // 假设返回的数据包含分页信息
+        } catch (error) {
+            console.error('获取图书数据失败:', error);
+        }
+    };
+
+    // 渲染表格内容
+    const renderTable = (books) => {
+        const tbody = document.querySelector('.book-table tbody');
+        tbody.innerHTML = ''; // 清空表格内容
+        books.forEach((book) => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><input type="checkbox" class="select-book" value="${book.id}"></td>
+                <td>${book.bookId}</td>
+                <td>${book.bookName}</td>
+                <td>${book.author}</td>
+                <td>${book.bookNum}</td>
+                <td>
+                    <button class="btn-edit" onclick="editBook(${book.id})">编辑</button>
+                    <button class="btn-delete" onclick="deleteBook(${book.id})">删除</button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        // 更新全选框的事件监听
+        const selectAllCheckbox = document.querySelector('.select-all');
+        selectAllCheckbox.addEventListener('change', (event) => {
+            const bookCheckboxes = document.querySelectorAll('.select-book');
+            bookCheckboxes.forEach((checkbox) => {
+                checkbox.checked = event.target.checked;
+            });
+        });
+
+        // 绑定图书复选框事件
+        const bookCheckboxes = document.querySelectorAll('.select-book');
+        bookCheckboxes.forEach((checkbox) => {
+            checkbox.addEventListener('change', () => {
+                // 如果有一个复选框没有被选中，则取消全选框的勾选
+                selectAllCheckbox.checked = [...bookCheckboxes].every(checkbox => checkbox.checked);
+            });
+        });
+    };
+
+    // 更新分页信息
+    const updatePagination = (currentPage, totalPages) => {
+        const pageInfo = document.querySelector('.page-info');
+        const prevButton = document.querySelector('.prev');
+        const nextButton = document.querySelector('.next');
+
+        // 更新页码显示
+        pageInfo.textContent = `第 ${currentPage} / ${totalPages} 页`;
+
+        // 根据当前页控制按钮显示
+        prevButton.disabled = currentPage <= 1;
+        nextButton.disabled = currentPage >= totalPages;
+    };
+
+    // 翻页功能
+    const changePage = (page) => {
+        if (page < 1 || page > totalPages) return;
+        currentPage = page;
+        fetchData(currentPage);
+    };
+
+    // 页面加载完成后获取第一页数据
+    document.addEventListener('DOMContentLoaded', () => {
+        fetchData(currentPage);
+
+        // 上一页按钮
+        document.querySelector('.prev').addEventListener('click', () => {
+            changePage(currentPage - 1);
+        });
+
+        // 下一页按钮
+        document.querySelector('.next').addEventListener('click', () => {
+            changePage(currentPage + 1);
+        });
+    });
+
+    const editBook = (bookId) => {
+        // 跳转到编辑页面，并传递图书ID作为查询参数
+        window.location.href = `/editBook?id=${bookId}`;
+    };
+
+    const deleteBook = async (bookId) => {
+        // 弹出确认框，询问用户是否确定删除
+        const isConfirmed = confirm(`确定要删除ID为${bookId}的图书吗？`);
+        // 如果用户点击了确认按钮
+        if (isConfirmed) {
+            try {
+                const response = await fetch(`/deleteBook/${bookId}/`, {
+                    method: 'DELETE',
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    alert(data.message);
+                    // 刷新表格数据
+                    fetchData(currentPage);
+                } else {
+                    alert(data.message);
+                }
+            } catch (error) {
+                console.error('删除图书失败:', error);
+                alert('删除失败');
+            }
+        } else {
+            // 如果用户点击取消，则不执行删除操作
+            console.log('删除操作被取消');
+        }
+    };
+
+    const batchDeleteBooks = async () => {
+        // 获取选中的图书 ID
+        const selectedCheckboxes = document.querySelectorAll('.select-book:checked');
+        const selectedBookIds = Array.from(selectedCheckboxes).map(cb => cb.value);
+
+        if (selectedBookIds.length === 0) {
+            alert('请先选择图书！');
+            return;
+        }
+
+        try {
+            // 发送请求到后端
+            const response = await fetch('/batchDeleteBooks/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ book_ids: selectedBookIds }),
+            });
+
+            const data = await response.json();
+
+            if (data.success) {
+                alert(data.message);
+                fetchData(currentPage); // 刷新数据
+            } else {
+                alert(data.message);
+            }
+        } catch (error) {
+            console.error('批量删除图书失败:', error);
+            alert('操作失败，请稍后再试');
+        }
+    };
+
+    const addBook = () => {
+        // 跳转到添加图书页面
+        window.location.href = '/addBook';
+    };
+</script>
+</body>
+</html>

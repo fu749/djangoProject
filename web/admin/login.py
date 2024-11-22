@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from function1.login import login_Admin
+from function1.login import login_Admin, login_t
 
 
 def loginAdmin(request):
@@ -10,8 +10,10 @@ def admin(request):
     if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
-        result = login_Admin(username)
+        result = login_Admin(username,password)
         if result is not None and str(result) == password :
             return render(request, 'admin/index.html')
     return render(request, 'admin/login.html')
+
+
 

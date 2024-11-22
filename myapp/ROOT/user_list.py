@@ -2,7 +2,7 @@ from dao.jdbc import oracle_execute_query
 
 
 def user_list():
-    query = "SELECT rd_name,RD_PASSWD FROM reader WHERE rd_id != :rd_id"
+    query = "SELECT * FROM reader WHERE rd_id != :rd_id"
     params = {'rd_id': 1}
     # 调用执行查询函数
     results = oracle_execute_query(query, params)
@@ -15,7 +15,7 @@ def user_list():
         return None
 
 
-def balck_list():
+def black_list():
     query = "SELECT RD_NAME FROM blacklist"
     params = {}
     # 调用执行查询函数

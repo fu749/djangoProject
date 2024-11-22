@@ -18,11 +18,22 @@ from django.contrib import admin
 from django.urls import path
 
 from CollectionList import CollectionList
-from admin.login import admin,loginAdmin
+from admin import batchAddToBlacklist
+from admin.batchAddToBlacklist import batch_add_blacklist, batch_Remove_Blacklist
+from admin.bookListServlet import bookList
+from admin.change_user import change_user
+from admin.delete_user import delete_user
+from admin.editUser import editUser
+from admin.login import admin, loginAdmin
+from admin.main import adminMain
+from admin.saveUser import saveUser
+from admin.toEditBooks import toEditBooks
+from admin.userListServlet import userList
 from back_Book import return_Books
 from bookList import Book_List
 from borrowBooks.returnBooks import returnBooks
 from borrowServlet import borrow_Book
+from changePassword import change_password
 from collectionServlet import collection_Book
 from function4.unconllection import unconllection_t
 from searchServlet import search_books
@@ -45,8 +56,28 @@ urlpatterns = [
     path('back_Book/<str:book_name>/', return_Books, name='back_Book'),
     path('unCollection/<int:book_id>/', unCollection, name='unCollection'),
     path('test/', test, name='test'),
-
+    path('change_password/',change_password,name='change_password'),
     path('loginAdmin/', loginAdmin , name='loginAdmin'),
     path('Admin/', admin, name='Admin'),
+    path('AdminMain/', adminMain, name='AdminMain'),
+    path('Admin/userList/', userList, name='userList'),
+    path('Admin/bookList/', bookList, name='bookList'),
+    path('editUser/', editUser, name='editUser'),
+    path('change_user/', change_user, name='change_user'),
+    path('saveUser/', saveUser, name='saveUser'),
+
+    path('deleteUser/<int:user_id>/', delete_user, name='delete_user'),
+
+    path('batchAddToBlacklist/', batch_add_blacklist, name='batchAddToBlacklist'),
+
+    path('batchRemoveFromBlacklist/', batch_Remove_Blacklist, name='batchRemoveFromBlacklist'),
+
+
+    path('toEditBooks/', toEditBooks, name='toEditBooks'),
+
+
+
+
+
 
 ]
