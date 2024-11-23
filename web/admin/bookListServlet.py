@@ -15,7 +15,6 @@ def bookList(request):
             'author': book[2],
             'bookNum': book[3]
         })
-    print(books_data)
     page = request.GET.get('page', 1)
 
     # 每页10条数据

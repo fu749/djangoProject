@@ -39,8 +39,8 @@
                     </a>
                 </li>
                 <li class="active">
-                    <a href="/bookManagement/">
-                        <span>图书管理</span>
+                    <a href="/toEditBooks/">
+                        <span>图书管理</span>  
                     </a>
                 </li>
             </ul>
@@ -110,14 +110,14 @@
         books.forEach((book) => {
             const tr = document.createElement('tr');
             tr.innerHTML = `
-                <td><input type="checkbox" class="select-book" value="${book.id}"></td>
+                <td><input type="checkbox" class="select-book" value="${book.bookId}"></td>
                 <td>${book.bookId}</td>
                 <td>${book.bookName}</td>
                 <td>${book.author}</td>
                 <td>${book.bookNum}</td>
                 <td>
-                    <button class="btn-edit" onclick="editBook(${book.id})">编辑</button>
-                    <button class="btn-delete" onclick="deleteBook(${book.id})">删除</button>
+                    <button class="btn-edit" onclick="editBook(${book.bookId})">编辑</button>
+                    <button class="btn-delete" onclick="deleteBook(${book.bookId})">删除</button>
                 </td>
             `;
             tbody.appendChild(tr);
@@ -180,7 +180,7 @@
 
     const editBook = (bookId) => {
         // 跳转到编辑页面，并传递图书ID作为查询参数
-        window.location.href = `/editBook?id=${bookId}`;
+        window.location.href = `/editBooks?id=${bookId}`;
     };
 
     const deleteBook = async (bookId) => {
@@ -189,7 +189,7 @@
         // 如果用户点击了确认按钮
         if (isConfirmed) {
             try {
-                const response = await fetch(`/deleteBook/${bookId}/`, {
+                const response = await fetch(`/batchDeleteBooks/${bookId}/`, {
                     method: 'DELETE',
                 });
 
@@ -248,7 +248,7 @@
 
     const addBook = () => {
         // 跳转到添加图书页面
-        window.location.href = '/addBook';
+        window.location.href = '/addBooks/';
     };
 </script>
 </body>
