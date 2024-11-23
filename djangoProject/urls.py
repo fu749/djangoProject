@@ -20,14 +20,17 @@ from django.urls import path
 from CollectionList import CollectionList
 from admin import batchAddToBlacklist
 from admin.batchAddToBlacklist import batch_add_blacklist, batch_Remove_Blacklist
+from admin.batchDeleteBooks import batchDeleteBook, batchDeleteBooks
 from admin.bookListServlet import bookList
 from admin.change_user import change_user
 from admin.delete_user import delete_user
+from admin.editBooks import editBooks, addBooks
 from admin.editUser import editUser
 from admin.login import admin, loginAdmin
 from admin.main import adminMain
 from admin.saveUser import saveUser
 from admin.toEditBooks import toEditBooks
+from admin.updateBook import updateBook
 from admin.userListServlet import userList
 from back_Book import return_Books
 from bookList import Book_List
@@ -74,10 +77,13 @@ urlpatterns = [
 
 
     path('toEditBooks/', toEditBooks, name='toEditBooks'),
+    path('editBooks/', editBooks, name='editBooks'),
+    
+    path('updateBook/', updateBook, name='updateBook'),
+    path('addBooks/', addBooks, name='addBooks'),
 
-
-
-
+    path('batchDeleteBook/<int:book_id>/', batchDeleteBook, name='batchDeleteBook'),
+    path('batchDeleteBooks/', batchDeleteBooks, name='batchDeleteBooks'),
 
 
 ]
