@@ -10,9 +10,9 @@ def searchBook_t(a):
     if output_result is not None:
         return output_result
 
-def searchBook_s():
-    query = "SELECT * FROM books"
-    params = {}
+def searchBook_s(bookName):
+    query = "SELECT * FROM books where book_name like :book"
+    params = {"book": "%"+bookName+"%"}
     results = oracle_execute_query(query, params)
     results = sorted(results, key=lambda x: x[0])
     # 进一步处理查询结果（如需要）
@@ -22,6 +22,7 @@ def searchBook_s():
     else:
         # 如果没有找到匹配的记录，返回 None 或空
         return None
+print(searchBook_s(""))
 def searchBook_id(bid):
     query = "SELECT * FROM books where book_id = :bid"
     params = {"bid":bid}

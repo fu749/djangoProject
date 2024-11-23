@@ -6,7 +6,8 @@ from function2.searchBook import searchBook_s
 
 
 def bookList(request):
-    books = searchBook_s()
+    query = request.GET.get('query', '').strip()
+    books = searchBook_s(query)
     books_data=[]
     for book in books:
         books_data.append({
