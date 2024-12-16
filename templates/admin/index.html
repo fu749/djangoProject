@@ -54,8 +54,8 @@
             <!-- 用户列表工具栏 -->
             <div class="toolbar">
                 <div class="search-box">
-                    <input type="text" placeholder="搜索用户">
-                    <button class="search-btn">搜索</button>
+                    <input type="text" placeholder="搜索用户" id="search-input">
+                    <button class="search-btn" onclick="searchUsers()">搜索</button>
                 </div>
                 <div class="action-buttons">
                     <button class="btn-export" onclick="batchAddToBlacklist()">拉入黑名单</button>
@@ -94,10 +94,21 @@
      let currentPage = 1;
 const totalPages = 10; // 假设你知道总页数
 
+     const searchUsers = () => {
+    const query = document.getElementById('search-input').value.trim();
+    if (query) {
+        fetchData(currentPage, query); // 传递搜索关键词
+    } else {
+        fetchData(currentPage); // 如果没有输入关键词，加载全部数据
+    }
+};
+
+
+
 // 合并后的 fetchData 函数
-const fetchData = async (page) => {
+const fetchData = async (page, query = '') => {
     try {
-        const response = await fetch(`/Admin/userList/?page=${page}`);
+        const response = await fetch(`/Admin/userList/?page=${page}&query=${encodeURIComponent(query)}`);
         const data = await response.json();
         renderTable(data.users); // 假设返回的数据有 users 属性
         updatePagination(data.current_page, data.total_pages); // 假设返回的数据包含分页信息
@@ -105,6 +116,7 @@ const fetchData = async (page) => {
         console.error('获取用户数据失败:', error);
     }
 };
+
 
 // 渲染表格内容
 const renderTable = (users) => {
@@ -168,6 +180,7 @@ const updatePagination = (currentPage, totalPages) => {
 const changePage = (page) => {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
+    document.getElementById('search-input').value = ''; // 清空搜索内容
     fetchData(currentPage);
 };
 
@@ -292,6 +305,12 @@ const batchRemoveFromBlacklist = async () => {
         alert('操作失败，请稍后再试');
     }
 };
+
+document.getElementById('search-input').addEventListener('keypress', (event) => {
+    if (event.key === 'Enter') {
+        searchUsers();
+    }
+});
 
 
      

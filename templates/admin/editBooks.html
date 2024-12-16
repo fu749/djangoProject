@@ -51,8 +51,8 @@
             <!-- 图书列表工具栏 -->
             <div class="toolbar">
                 <div class="search-box">
-                    <input type="text" placeholder="搜索图书">
-                    <button class="search-btn">搜索</button>
+                    <input type="text" placeholder="搜索图书" id="search-input">
+                    <button class="search-btn" onclick="searchBooks()">搜索</button>
                 </div>
                 <div class="action-buttons">
                     <button class="btn-add" onclick="addBook()">添加图书</button>
@@ -91,17 +91,28 @@
     let currentPage = 1;
     const totalPages = 10; // 假设你知道总页数
 
+    let currentQuery = ''; // 全局变量，保存当前搜索关键字
+    
+    const searchBooks = () => {
+    const searchInput = document.getElementById('search-input').value.trim();
+    currentQuery = searchInput; // 更新全局关键字
+    fetchData(1, currentQuery); // 搜索从第一页开始
+};
+
     // 合并后的 fetchData 函数
-    const fetchData = async (page) => {
-        try {
-            const response = await fetch(`/Admin/bookList/?page=${page}`);
-            const data = await response.json();
-            renderTable(data.books); // 假设返回的数据有 books 属性
-            updatePagination(data.current_page, data.total_pages); // 假设返回的数据包含分页信息
-        } catch (error) {
-            console.error('获取图书数据失败:', error);
-        }
-    };
+    const fetchData = async (page, query = '') => {
+    try {
+        const response = await fetch(`/Admin/bookList/?page=${page}&query=${encodeURIComponent(query)}`);
+        const data = await response.json();
+        renderTable(data.books);
+        updatePagination(data.current_page, data.total_pages);
+    } catch (error) {
+        console.error('获取图书数据失败:', error);
+    }
+};
+
+
+
 
     // 渲染表格内容
     const renderTable = (books) => {
@@ -158,10 +169,10 @@
 
     // 翻页功能
     const changePage = (page) => {
-        if (page < 1 || page > totalPages) return;
-        currentPage = page;
-        fetchData(currentPage);
-    };
+    if (page < 1 || page > totalPages) return;
+    currentPage = page;
+    fetchData(currentPage, currentQuery); // 翻页时保持搜索关键字
+};
 
     // 页面加载完成后获取第一页数据
     document.addEventListener('DOMContentLoaded', () => {
@@ -176,6 +187,12 @@
         document.querySelector('.next').addEventListener('click', () => {
             changePage(currentPage + 1);
         });
+        
+        document.getElementById('search-input').addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            searchBooks();
+        }
+    });
     });
 
     const editBook = (bookId) => {
@@ -250,6 +267,24 @@
         // 跳转到添加图书页面
         window.location.href = '/addBooks/';
     };
+    
+    
+    
+    
+    
+    
+
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
 </script>
 </body>
 </html>

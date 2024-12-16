@@ -5,7 +5,8 @@ from ROOT.user_list import user_list, black_list
 
 
 def userList(request):
-    user = user_list()
+    query = request.GET.get('query', '').strip()
+    user = user_list(query)
     sorted_data = sorted(user, key=lambda x: x[0])
     user = sorted_data
     black = black_list()
